@@ -6,6 +6,7 @@
   <version>1.0-SNAPSHOT</version>
   <name>YourIndieProject Maven Webapp</name>
   <url>http://maven.apache.org</url>
+
   <properties>
     <maven.compiler.release>11</maven.compiler.release>
     <junit.version>4.12</junit.version>
@@ -19,6 +20,7 @@
     <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
     <maven-surefire-plugin-version>2.19</maven-surefire-plugin-version>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.junit.platform</groupId>
@@ -72,8 +74,9 @@
       <version>${log4j-version}</version>
     </dependency>
   </dependencies>
+
   <build>
-    <finalName>YourIndieProject</finalName>
+    <finalName>Task-Tracker</finalName>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -95,4 +98,5 @@
       </plugins>
     </pluginManagement>
   </build>
+
 </project>
