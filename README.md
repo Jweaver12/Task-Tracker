@@ -104,6 +104,10 @@ The planned database will contain multiple one-to-many relationships.
 
 One project can contain many tasks.
 
+## Screen Design
+
+Screen designs and wireframes are documented in the project repository.
+
 ```text
 Project
    |
