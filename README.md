@@ -41,7 +41,19 @@ Planned and currently used technologies include:
 - Git and GitHub
 - AWS
 - AWS Cognito
+- Google Calendar API
 - REST API integration
+
+## Chosen Web Service / API
+
+Task Tracker will use the Google Calendar API.
+
+The planned feature will allow a user to add a task and its due date to
+their Google Calendar. This will allow Task Tracker to work with a calendar
+service that users may already use for scheduling.
+
+The API integration will be implemented later in the project when REST API
+consumption is covered in the course.
 
 ## User Stories
 
@@ -83,9 +95,8 @@ Planned and currently used technologies include:
 
 #### External API
 
-- As a user, I want to send or display task due-date information through an
-  external calendar service so that my tasks can work with a scheduling tool
-  I already use.
+- As a user, I want to add a task and its due date to Google Calendar so that
+  I can see my tasks alongside my existing schedule.
 
 ### Future User Stories
 
@@ -104,20 +115,206 @@ The planned database will contain multiple one-to-many relationships.
 
 One project can contain many tasks.
 
-## Screen Design
-
-Screen designs and wireframes are documented in the project repository.
-
 ```text
 Project
    |
    | One-to-Many
    v
 Task
-
 ```
+
+### Category to Task
+
+One category can be assigned to many tasks.
+
+```text
+Category
+   |
+   | One-to-Many
+   v
+Task
+```
+
+## Screen Design
+
+The low-fidelity screen designs and application flow are documented in
+[Task Tracker Wireframes](docs/wireframes.md).
 
 ## Database Design
 
 The planned database relationships are documented in the
 [Task Tracker ERD](docs/erd.md).
+
+## Application Flow
+
+1. A new user creates an account or an existing user logs in.
+2. The user reaches the Task Tracker dashboard.
+3. The dashboard displays the user's active and completed tasks.
+4. The user can create projects and categories to organize tasks.
+5. The user can add a task with a description, due date, project, and
+   category.
+6. The new task appears in the active task list.
+7. The user can edit, complete, or delete an active task.
+8. Completed tasks move to the completed task view.
+9. The user can add task due-date information to Google Calendar.
+10. The user can log out when finished.
+
+## Project Plan
+
+### Week 4 - Planning and Checkpoint 1
+
+- Define the application problem.
+- Identify MVP and future user stories.
+- Create initial screen designs.
+- Create the application flow.
+- Create the initial project schedule.
+- Submit Checkpoint 1 for instructor feedback.
+
+### Week 5 - Hibernate Practice and Project Design
+
+- Practice Hibernate One-to-Many relationships.
+- Review how entities, DAOs, and unit tests work together.
+- Continue refining the Task Tracker database design.
+- Review Checkpoint 1 requirements.
+
+### Week 6 - Checkpoint Revisions and Peer Review
+
+- Review instructor Checkpoint 1 feedback.
+- Expand the problem statement.
+- Add all required project user stories.
+- Add planned technologies to the README.
+- Add multiple One-to-Many relationships.
+- Select the Google Calendar API.
+- Expand the project plan into detailed development tasks.
+- Create project wireframes.
+- Create the database ERD.
+- Update the course time log.
+- Complete the first peer review.
+- Document feedback received during the review.
+
+### Week 7 - Database, Hibernate, and Authentication
+
+#### Project
+
+- Create the project database table.
+- Create the Project entity.
+- Configure Hibernate mapping for Project.
+- Use the course Generic DAO for database access.
+- Create unit tests for Project database operations.
+
+#### Category
+
+- Create the category database table.
+- Create the Category entity.
+- Configure Hibernate mapping for Category.
+- Use the course Generic DAO for database access.
+- Create unit tests for Category database operations.
+
+#### Task
+
+- Create the task database table.
+- Add foreign keys for Project and Category.
+- Create the Task entity.
+- Configure the One-to-Many relationships.
+- Use the course Generic DAO for Task CRUD operations.
+- Create unit tests for Task database operations.
+- Test the entity relationships.
+- Add Log4J logging.
+
+#### Authentication
+
+- Configure AWS Cognito.
+- Implement account registration.
+- Implement login.
+- Implement logout.
+- Implement password reset.
+
+### Week 8 - REST API
+
+- Review the Google Calendar API documentation.
+- Test the Google Calendar API using the tools introduced in class.
+- Create Java code that consumes the Google Calendar API.
+- Connect task due-date information to the calendar feature.
+- Test adding a task due date to Google Calendar.
+
+### Week 9 - Web Interface and AWS
+
+#### View Tasks
+
+- Create a controller that retrieves task data.
+- Create a JSP that displays tasks.
+- Display active tasks.
+- Display completed tasks.
+
+#### Add Tasks
+
+- Create the add-task form.
+- Create the controller logic for adding a task.
+- Connect the form to Hibernate.
+- Verify the new task displays after it is created.
+
+#### Edit and Complete Tasks
+
+- Create the edit-task form.
+- Create controller logic for updating tasks.
+- Add the ability to mark a task complete.
+- Verify changes are saved to the database.
+
+#### Delete Tasks
+
+- Add the delete-task action.
+- Connect delete functionality to Hibernate.
+- Verify deleted tasks are removed from the database.
+
+#### Deployment
+
+- Deploy the application to AWS.
+- Connect the deployed application to its database.
+- Verify authentication works.
+- Verify database information displays in JSP pages.
+
+### Week 10
+
+- Add project management screens.
+- Add category management screens.
+- Connect project and category selection to task forms.
+- Test the complete One-to-Many relationships.
+
+### Week 11
+
+- Continue implementing remaining MVP stories.
+- Improve task filtering and organization.
+- Add unit tests for new functionality.
+
+### Week 12
+
+- Continue application testing.
+- Correct problems discovered during testing.
+- Review application usability and navigation.
+
+### Week 13
+
+- Complete remaining MVP development.
+- Verify Google Calendar API integration.
+- Verify authentication and authorization.
+- Review application logging and error handling.
+
+### Week 14
+
+- Complete the second peer code review.
+- Document feedback received.
+- Make changes based on peer and instructor feedback.
+
+### Week 15
+
+- Complete final application testing.
+- Generate JavaDoc documentation.
+- Update the README with final application information.
+- Verify the deployed application is working correctly.
+- Prepare the final presentation and demonstration.
+
+### Week 16
+
+- Complete final corrections.
+- Present the finished application.
+- Record and publish the final application demonstration.
