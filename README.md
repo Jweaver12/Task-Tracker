@@ -114,3 +114,10 @@ Project
    | One-to-Many
    v
 Task
+
+```
+
+## Database Design
+
+The planned database relationships are documented in the
+[Task Tracker ERD](docs/erd.md).
