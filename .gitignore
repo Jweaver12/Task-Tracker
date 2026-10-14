@@ -47,3 +47,8 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+
+# Sensitive configuration files
+src/main/resources/hibernate.cfg.xml
+src/main/resources/database.properties
+src/main/resources/cognito.properties
