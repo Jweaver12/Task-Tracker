@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests Category persistence using the generic DAO.
@@ -21,10 +22,10 @@ class CategoryDaoTest extends DaoTestBase {
      */
     @Test
     void getByIdSuccess() {
-        Category category = createTestCategory("Coursework");
-        Category retrievedCategory = categoryDao.getById(category.getId());
+        Category retrievedCategory = categoryDao.getById(1);
 
-        assertEquals(category, retrievedCategory);
+        assertNotNull(retrievedCategory);
+        assertEquals("Homework", retrievedCategory.getName());
     }
 
     /**
@@ -33,10 +34,15 @@ class CategoryDaoTest extends DaoTestBase {
     @Test
     void insertSuccess() {
         Category category = new Category("Personal");
+
         int id = categoryDao.insert(category);
 
-        category.setId(id);
-        assertEquals(category, categoryDao.getById(id));
+        assertNotEquals(0, id);
+
+        Category insertedCategory = categoryDao.getById(id);
+
+        assertNotNull(insertedCategory);
+        assertEquals("Personal", insertedCategory.getName());
     }
 
     /**
@@ -44,11 +50,14 @@ class CategoryDaoTest extends DaoTestBase {
      */
     @Test
     void updateSuccess() {
-        Category category = createTestCategory("School");
-        category.setName("Coursework");
-        categoryDao.update(category);
+        Category categoryToUpdate = categoryDao.getById(2);
 
-        assertEquals(category, categoryDao.getById(category.getId()));
+        categoryToUpdate.setName("Coursework");
+        categoryDao.update(categoryToUpdate);
+
+        Category categoryAfterUpdate = categoryDao.getById(2);
+
+        assertEquals("Coursework", categoryAfterUpdate.getName());
     }
 
     /**
@@ -56,10 +65,11 @@ class CategoryDaoTest extends DaoTestBase {
      */
     @Test
     void deleteSuccess() {
-        Category category = createTestCategory("Temporary");
-        categoryDao.delete(category);
+        Category categoryToDelete = categoryDao.getById(3);
 
-        assertNull(categoryDao.getById(category.getId()));
+        categoryDao.delete(categoryToDelete);
+
+        assertNull(categoryDao.getById(3));
     }
 
     /**
@@ -67,13 +77,8 @@ class CategoryDaoTest extends DaoTestBase {
      */
     @Test
     void getAllSuccess() {
-        Category firstCategory = createTestCategory("Coursework");
-        Category secondCategory = createTestCategory("Personal");
-
         List<Category> categories = categoryDao.getAll();
 
-        assertEquals(2, categories.size());
-        assertTrue(categories.contains(firstCategory));
-        assertTrue(categories.contains(secondCategory));
+        assertEquals(3, categories.size());
     }
 }

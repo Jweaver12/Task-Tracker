@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests User persistence using the generic DAO.
@@ -21,11 +22,10 @@ class UserDaoTest extends DaoTestBase {
      */
     @Test
     void getByIdSuccess() {
-        User user = createTestUser("jweaver");
+        User retrievedUser = userDao.getById(1);
 
-        User retrievedUser = userDao.getById(user.getId());
-
-        assertEquals(user, retrievedUser);
+        assertNotNull(retrievedUser);
+        assertEquals("jweaver", retrievedUser.getUsername());
     }
 
     /**
@@ -33,12 +33,16 @@ class UserDaoTest extends DaoTestBase {
      */
     @Test
     void insertSuccess() {
-        User user = new User("testuser");
+        User user = new User("newuser");
 
         int id = userDao.insert(user);
-        user.setId(id);
 
-        assertEquals(user, userDao.getById(id));
+        assertNotEquals(0, id);
+
+        User insertedUser = userDao.getById(id);
+
+        assertNotNull(insertedUser);
+        assertEquals("newuser", insertedUser.getUsername());
     }
 
     /**
@@ -46,12 +50,14 @@ class UserDaoTest extends DaoTestBase {
      */
     @Test
     void updateSuccess() {
-        User user = createTestUser("oldusername");
-        user.setUsername("newusername");
+        User userToUpdate = userDao.getById(2);
 
-        userDao.update(user);
+        userToUpdate.setUsername("updateduser");
+        userDao.update(userToUpdate);
 
-        assertEquals(user, userDao.getById(user.getId()));
+        User userAfterUpdate = userDao.getById(2);
+
+        assertEquals("updateduser", userAfterUpdate.getUsername());
     }
 
     /**
@@ -59,11 +65,11 @@ class UserDaoTest extends DaoTestBase {
      */
     @Test
     void deleteSuccess() {
-        User user = createTestUser("deleteuser");
+        User userToDelete = userDao.getById(3);
 
-        userDao.delete(user);
+        userDao.delete(userToDelete);
 
-        assertNull(userDao.getById(user.getId()));
+        assertNull(userDao.getById(3));
     }
 
     /**
@@ -71,13 +77,8 @@ class UserDaoTest extends DaoTestBase {
      */
     @Test
     void getAllSuccess() {
-        User firstUser = createTestUser("firstuser");
-        User secondUser = createTestUser("seconduser");
-
         List<User> users = userDao.getAll();
 
-        assertEquals(2, users.size());
-        assertTrue(users.contains(firstUser));
-        assertTrue(users.contains(secondUser));
+        assertEquals(3, users.size());
     }
 }

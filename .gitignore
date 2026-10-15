@@ -50,5 +50,5 @@ fabric.properties
 
 # Sensitive configuration files
 src/main/resources/hibernate.cfg.xml
-src/main/resources/database.properties
+src/test/resources/database.properties
 src/main/resources/cognito.properties

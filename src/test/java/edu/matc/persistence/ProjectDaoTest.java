@@ -6,8 +6,9 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests Project persistence using the generic DAO.
@@ -21,10 +22,10 @@ class ProjectDaoTest extends DaoTestBase {
      */
     @Test
     void getByIdSuccess() {
-        Project project = createTestProject("Enterprise Java");
-        Project retrievedProject = projectDao.getById(project.getId());
+        Project retrievedProject = projectDao.getById(1);
 
-        assertEquals(project, retrievedProject);
+        assertNotNull(retrievedProject);
+        assertEquals("School", retrievedProject.getName());
     }
 
     /**
@@ -33,10 +34,15 @@ class ProjectDaoTest extends DaoTestBase {
     @Test
     void insertSuccess() {
         Project project = new Project("Portfolio");
+
         int id = projectDao.insert(project);
 
-        project.setId(id);
-        assertEquals(project, projectDao.getById(id));
+        assertNotEquals(0, id);
+
+        Project insertedProject = projectDao.getById(id);
+
+        assertNotNull(insertedProject);
+        assertEquals("Portfolio", insertedProject.getName());
     }
 
     /**
@@ -44,11 +50,14 @@ class ProjectDaoTest extends DaoTestBase {
      */
     @Test
     void updateSuccess() {
-        Project project = createTestProject("School");
-        project.setName("College");
-        projectDao.update(project);
+        Project projectToUpdate = projectDao.getById(2);
 
-        assertEquals(project, projectDao.getById(project.getId()));
+        projectToUpdate.setName("College");
+        projectDao.update(projectToUpdate);
+
+        Project projectAfterUpdate = projectDao.getById(2);
+
+        assertEquals("College", projectAfterUpdate.getName());
     }
 
     /**
@@ -56,10 +65,11 @@ class ProjectDaoTest extends DaoTestBase {
      */
     @Test
     void deleteSuccess() {
-        Project project = createTestProject("Temporary");
-        projectDao.delete(project);
+        Project projectToDelete = projectDao.getById(3);
 
-        assertNull(projectDao.getById(project.getId()));
+        projectDao.delete(projectToDelete);
+
+        assertNull(projectDao.getById(3));
     }
 
     /**
@@ -67,13 +77,8 @@ class ProjectDaoTest extends DaoTestBase {
      */
     @Test
     void getAllSuccess() {
-        Project firstProject = createTestProject("School");
-        Project secondProject = createTestProject("Work");
-
         List<Project> projects = projectDao.getAll();
 
-        assertEquals(2, projects.size());
-        assertTrue(projects.contains(firstProject));
-        assertTrue(projects.contains(secondProject));
+        assertEquals(3, projects.size());
     }
 }

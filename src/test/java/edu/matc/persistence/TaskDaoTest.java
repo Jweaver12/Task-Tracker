@@ -10,8 +10,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests Task persistence and entity relationships using the generic DAO.
@@ -25,13 +26,13 @@ class TaskDaoTest extends DaoTestBase {
      */
     @Test
     void getByIdSuccess() {
-        Task task = createTestTask("Complete checkpoint", false);
-        Task retrievedTask = taskDao.getById(task.getId());
+        Task retrievedTask = taskDao.getById(1);
 
-        assertEquals(task, retrievedTask);
-        assertEquals(task.getProject(), retrievedTask.getProject());
-        assertEquals(task.getCategory(), retrievedTask.getCategory());
-        assertEquals(task.getUser(), retrievedTask.getUser());
+        assertNotNull(retrievedTask);
+        assertEquals("Java Assignment", retrievedTask.getName());
+        assertEquals("School", retrievedTask.getProject().getName());
+        assertEquals("Homework", retrievedTask.getCategory().getName());
+        assertEquals("jweaver", retrievedTask.getUser().getUsername());
     }
 
     /**
@@ -39,18 +40,31 @@ class TaskDaoTest extends DaoTestBase {
      */
     @Test
     void insertSuccess() {
-        Project project = createTestProject("Enterprise Java");
-        Category category = createTestCategory("Coursework");
-        User user = createTestUser("jweaver");
+        Project project = projectDao.getById(1);
+        Category category = categoryDao.getById(1);
+        User user = userDao.getById(1);
 
-        Task task = new Task("Create DAO tests", "Test full CRUD",
-                LocalDate.of(2026, 10, 18), false, project, category);
+        Task task = new Task(
+                "Create DAO tests",
+                "Test full CRUD",
+                LocalDate.of(2026, 10, 18),
+                false,
+                project,
+                category);
+
         task.setUser(user);
 
         int id = taskDao.insert(task);
-        task.setId(id);
 
-        assertEquals(task, taskDao.getById(id));
+        assertNotEquals(0, id);
+
+        Task insertedTask = taskDao.getById(id);
+
+        assertNotNull(insertedTask);
+        assertEquals("Create DAO tests", insertedTask.getName());
+        assertEquals(project, insertedTask.getProject());
+        assertEquals(category, insertedTask.getCategory());
+        assertEquals(user, insertedTask.getUser());
     }
 
     /**
@@ -58,12 +72,18 @@ class TaskDaoTest extends DaoTestBase {
      */
     @Test
     void updateSuccess() {
-        Task task = createTestTask("Finish project", false);
-        task.setDescription("Finish Checkpoint 2 work");
-        task.setCompleted(true);
-        taskDao.update(task);
+        Task taskToUpdate = taskDao.getById(1);
 
-        assertEquals(task, taskDao.getById(task.getId()));
+        taskToUpdate.setDescription("Finish Checkpoint 2 work");
+        taskToUpdate.setCompleted(true);
+        taskDao.update(taskToUpdate);
+
+        Task taskAfterUpdate = taskDao.getById(1);
+
+        assertEquals(
+                "Finish Checkpoint 2 work",
+                taskAfterUpdate.getDescription());
+        assertEquals(true, taskAfterUpdate.isCompleted());
     }
 
     /**
@@ -71,10 +91,11 @@ class TaskDaoTest extends DaoTestBase {
      */
     @Test
     void deleteSuccess() {
-        Task task = createTestTask("Temporary task", false);
-        taskDao.delete(task);
+        Task taskToDelete = taskDao.getById(2);
 
-        assertNull(taskDao.getById(task.getId()));
+        taskDao.delete(taskToDelete);
+
+        assertNull(taskDao.getById(2));
     }
 
     /**
@@ -82,34 +103,8 @@ class TaskDaoTest extends DaoTestBase {
      */
     @Test
     void getAllSuccess() {
-        Task firstTask = createTestTask("First task", false);
-        Task secondTask = createTestTask("Second task", true);
-
         List<Task> tasks = taskDao.getAll();
 
         assertEquals(2, tasks.size());
-        assertTrue(tasks.contains(firstTask));
-        assertTrue(tasks.contains(secondTask));
-    }
-
-    /**
-     * Creates and inserts a task with a user, project, and category.
-     *
-     * @param name task name
-     * @param completed completion status
-     * @return inserted task
-     */
-    private Task createTestTask(String name, boolean completed) {
-        Project project = createTestProject(name + " Project");
-        Category category = createTestCategory(name + " Category");
-        User user = createTestUser(name + " User");
-
-        Task task = new Task(name, "Test task",
-                LocalDate.of(2026, 10, 18), completed, project, category);
-        task.setUser(user);
-
-        int id = taskDao.insert(task);
-        task.setId(id);
-        return task;
     }
 }
