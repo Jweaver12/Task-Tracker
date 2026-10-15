@@ -1,5 +1,8 @@
 package edu.matc.persistence;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
@@ -95,8 +98,12 @@ public class GenericDao<T> {
      */
     public List<T> getAll() {
         try (Session session = sessionFactory.openSession()) {
-            return session.createSelectionQuery(
-                    "FROM " + type.getSimpleName(), type).getResultList();
+            CriteriaBuilder builder = session.getCriteriaBuilder();
+
+            CriteriaQuery<T> query = builder.createQuery(type);
+            Root<T> root = query.from(type);
+
+            return session.createQuery(query).getResultList();
         }
     }
 }
