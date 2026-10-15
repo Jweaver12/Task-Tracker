@@ -14,39 +14,44 @@ task_tracker
 Tables expected by the entities:
 
 ```text
+user
 project
 category
 task
 ```
 
-The table columns should match `docs/erd.md` and the Hibernate entity
-annotations in `src/main/java/edu/matc/entity`.
+The table columns and relationships should match `docs/erd.md`,
+`src/main/resources/dump.sql`, and the Hibernate entity annotations in
+`src/main/java/edu/matc/entity`.
 
-## Hibernate Credentials
+## Local Database Configuration
 
-Open:
+The following files contain local database configuration and are ignored
+by Git:
 
 ```text
 src/main/resources/hibernate.cfg.xml
+src/test/resources/database.properties
 ```
 
-Replace only this placeholder with the local MySQL password:
+Do not commit database passwords to GitHub.
+
+## Test Database Setup
+
+The DAO tests use:
 
 ```text
-CHANGE_ME
+src/test/resources/cleandb.sql
 ```
 
-Do not commit a real password to GitHub. Before committing, change the value
-back to `CHANGE_ME`.
+to reset the database to a known state before each test.
+
+This keeps the tests from depending on another DAO method to create the
+records needed for testing.
 
 ## Test Command
 
-After the database and tables exist and the local Hibernate credentials are
-set, run:
+After the database and tables exist and the local database credentials
+are configured, run the Maven tests.
 
-```text
-mvn test
-```
-
-The DAO tests clear their own test records before each test. They do not
-create the database or tables.
+The tests require the local MySQL service to be running.

@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Represents a user who owns tasks in the Task Tracker.
+ * Represents a user who owns projects and tasks in the Task Tracker.
  *
  * @author JaQuan Weaver
  */
@@ -27,6 +27,9 @@ public class User {
 
     @Column(name = "username")
     private String username;
+
+    @OneToMany(mappedBy = "user")
+    private Set<Project> projects = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Task> tasks = new HashSet<>();
@@ -80,6 +83,34 @@ public class User {
      */
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    /**
+     * Gets projects.
+     *
+     * @return user's projects
+     */
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    /**
+     * Sets projects.
+     *
+     * @param projects user's projects
+     */
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
+    }
+
+    /**
+     * Adds a project to this user.
+     *
+     * @param project project to add
+     */
+    public void addProject(Project project) {
+        projects.add(project);
+        project.setUser(this);
     }
 
     /**

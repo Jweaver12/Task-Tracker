@@ -87,7 +87,7 @@ class TaskDaoTest extends DaoTestBase {
     }
 
     /**
-     * Verifies a task can be deleted.
+     * Verifies deleting a task does not delete its user or project.
      */
     @Test
     void deleteSuccess() {
@@ -96,6 +96,8 @@ class TaskDaoTest extends DaoTestBase {
         taskDao.delete(taskToDelete);
 
         assertNull(taskDao.getById(2));
+        assertNotNull(projectDao.getById(2));
+        assertNotNull(userDao.getById(2));
     }
 
     /**

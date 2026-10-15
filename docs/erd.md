@@ -5,6 +5,7 @@ application.
 
 ```mermaid
 erDiagram
+    USER ||--o{ PROJECT : owns
     USER ||--o{ TASK : owns
     PROJECT ||--o{ TASK : contains
     CATEGORY ||--o{ TASK : categorizes
@@ -16,6 +17,7 @@ erDiagram
 
     PROJECT {
         int id PK
+        int user_id FK
         string name
     }
 
@@ -38,6 +40,12 @@ erDiagram
 
 ## Relationships
 
+### User to Project
+
+One user can own many projects.
+
+A project belongs to one user.
+
 ### User to Task
 
 One user can own many tasks.
@@ -58,6 +66,9 @@ A task belongs to one project.
 One category can be assigned to many tasks.
 
 A task belongs to one category.
+
+Deleting a user deletes their projects and tasks. Deleting a project
+deletes its tasks. Deleting a task does not delete its project or user.
 
 These relationships provide the multiple one-to-many relationships
 required for the individual project.

@@ -10,7 +10,13 @@ CREATE TABLE `user` (
 
 CREATE TABLE project (
                          id INT AUTO_INCREMENT PRIMARY KEY,
-                         name VARCHAR(255)
+                         name VARCHAR(255),
+                         user_id INT NOT NULL,
+                         CONSTRAINT fk_project_user
+                             FOREIGN KEY (user_id)
+                                 REFERENCES `user`(id)
+                                 ON DELETE CASCADE
+                                 ON UPDATE CASCADE
 );
 
 CREATE TABLE category (
@@ -29,11 +35,15 @@ CREATE TABLE task (
                       user_id INT,
                       CONSTRAINT fk_task_project
                           FOREIGN KEY (project_id)
-                              REFERENCES project(id),
+                              REFERENCES project(id)
+                              ON DELETE CASCADE
+                              ON UPDATE CASCADE,
                       CONSTRAINT fk_task_category
                           FOREIGN KEY (category_id)
                               REFERENCES category(id),
                       CONSTRAINT fk_task_user
                           FOREIGN KEY (user_id)
                               REFERENCES `user`(id)
+                              ON DELETE CASCADE
+                              ON UPDATE CASCADE
 );

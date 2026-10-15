@@ -1,6 +1,7 @@
 package edu.matc.persistence;
 
 import edu.matc.entity.Project;
+import edu.matc.entity.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -26,6 +27,9 @@ class ProjectDaoTest extends DaoTestBase {
 
         assertNotNull(retrievedProject);
         assertEquals("School", retrievedProject.getName());
+        assertEquals(
+                "jweaver",
+                retrievedProject.getUser().getUsername());
     }
 
     /**
@@ -33,7 +37,10 @@ class ProjectDaoTest extends DaoTestBase {
      */
     @Test
     void insertSuccess() {
+        User user = userDao.getById(1);
+
         Project project = new Project("Portfolio");
+        project.setUser(user);
 
         int id = projectDao.insert(project);
 
@@ -43,6 +50,7 @@ class ProjectDaoTest extends DaoTestBase {
 
         assertNotNull(insertedProject);
         assertEquals("Portfolio", insertedProject.getName());
+        assertEquals(user, insertedProject.getUser());
     }
 
     /**
@@ -61,15 +69,17 @@ class ProjectDaoTest extends DaoTestBase {
     }
 
     /**
-     * Verifies a project can be deleted.
+     * Verifies deleting a project also deletes its tasks.
      */
     @Test
     void deleteSuccess() {
-        Project projectToDelete = projectDao.getById(3);
+        Project projectToDelete = projectDao.getById(2);
 
         projectDao.delete(projectToDelete);
 
-        assertNull(projectDao.getById(3));
+        assertNull(projectDao.getById(2));
+        assertNull(taskDao.getById(2));
+        assertNotNull(userDao.getById(2));
     }
 
     /**

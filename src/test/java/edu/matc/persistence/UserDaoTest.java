@@ -61,15 +61,17 @@ class UserDaoTest extends DaoTestBase {
     }
 
     /**
-     * Verifies a user can be deleted.
+     * Verifies deleting a user also deletes their projects and tasks.
      */
     @Test
     void deleteSuccess() {
-        User userToDelete = userDao.getById(3);
+        User userToDelete = userDao.getById(1);
 
         userDao.delete(userToDelete);
 
-        assertNull(userDao.getById(3));
+        assertNull(userDao.getById(1));
+        assertNull(projectDao.getById(1));
+        assertNull(taskDao.getById(1));
     }
 
     /**
