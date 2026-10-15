@@ -3,6 +3,7 @@ package edu.matc.persistence;
 import edu.matc.entity.Category;
 import edu.matc.entity.Project;
 import edu.matc.entity.Task;
+import edu.matc.entity.User;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -30,6 +31,7 @@ class TaskDaoTest extends DaoTestBase {
         assertEquals(task, retrievedTask);
         assertEquals(task.getProject(), retrievedTask.getProject());
         assertEquals(task.getCategory(), retrievedTask.getCategory());
+        assertEquals(task.getUser(), retrievedTask.getUser());
     }
 
     /**
@@ -39,8 +41,11 @@ class TaskDaoTest extends DaoTestBase {
     void insertSuccess() {
         Project project = createTestProject("Enterprise Java");
         Category category = createTestCategory("Coursework");
+        User user = createTestUser("jweaver");
+
         Task task = new Task("Create DAO tests", "Test full CRUD",
                 LocalDate.of(2026, 10, 18), false, project, category);
+        task.setUser(user);
 
         int id = taskDao.insert(task);
         task.setId(id);
@@ -88,7 +93,7 @@ class TaskDaoTest extends DaoTestBase {
     }
 
     /**
-     * Creates and inserts a task with a project and category.
+     * Creates and inserts a task with a user, project, and category.
      *
      * @param name task name
      * @param completed completion status
@@ -97,8 +102,12 @@ class TaskDaoTest extends DaoTestBase {
     private Task createTestTask(String name, boolean completed) {
         Project project = createTestProject(name + " Project");
         Category category = createTestCategory(name + " Category");
+        User user = createTestUser(name + " User");
+
         Task task = new Task(name, "Test task",
                 LocalDate.of(2026, 10, 18), completed, project, category);
+        task.setUser(user);
+
         int id = taskDao.insert(task);
         task.setId(id);
         return task;

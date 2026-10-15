@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * Represents a task that belongs to a project and category.
+ * Represents a task that belongs to a user, project, and category.
  *
  * @author JaQuan Weaver
  */
@@ -44,6 +44,10 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     /**
      * Instantiates a new Task.
@@ -198,6 +202,24 @@ public class Task {
     }
 
     /**
+     * Gets user.
+     *
+     * @return task user
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * Sets user.
+     *
+     * @param user task user
+     */
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    /**
      * Compares this entity with another entity.
      *
      * @param object object to compare
@@ -217,7 +239,8 @@ public class Task {
                 && Objects.equals(description, task.description)
                 && Objects.equals(dueDate, task.dueDate)
                 && Objects.equals(project, task.project)
-                && Objects.equals(category, task.category);
+                && Objects.equals(category, task.category)
+                && Objects.equals(user, task.user);
     }
 
     /**
@@ -228,7 +251,7 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(name, description, dueDate, completed,
-                project, category);
+                project, category, user);
     }
 
     /**
@@ -246,6 +269,7 @@ public class Task {
                 ", completed=" + completed +
                 ", project=" + project +
                 ", category=" + category +
+                ", user=" + user +
                 '}';
     }
 }

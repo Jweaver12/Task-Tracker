@@ -1,25 +1,32 @@
 # Task Tracker ERD
 
-This ERD shows the planned database structure for the Task Tracker
+This ERD shows the current database structure for the Task Tracker
 application.
 
 ```mermaid
 erDiagram
+    USER ||--o{ TASK : owns
     PROJECT ||--o{ TASK : contains
     CATEGORY ||--o{ TASK : categorizes
 
+    USER {
+        int id PK
+        string username
+    }
+
     PROJECT {
-        int project_id PK
+        int id PK
         string name
     }
 
     CATEGORY {
-        int category_id PK
+        int id PK
         string name
     }
 
     TASK {
-        int task_id PK
+        int id PK
+        int user_id FK
         int project_id FK
         int category_id FK
         string name
@@ -30,6 +37,15 @@ erDiagram
 ```
 
 ## Relationships
+
+### User to Task
+
+One user can own many tasks.
+
+A task belongs to one user.
+
+The username is stored in the Task Tracker database so tasks can be
+associated with the authenticated user.
 
 ### Project to Task
 

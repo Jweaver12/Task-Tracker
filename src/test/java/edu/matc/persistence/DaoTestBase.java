@@ -3,6 +3,7 @@ package edu.matc.persistence;
 import edu.matc.entity.Category;
 import edu.matc.entity.Project;
 import edu.matc.entity.Task;
+import edu.matc.entity.User;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +18,7 @@ public abstract class DaoTestBase {
     protected GenericDao<Project> projectDao;
     protected GenericDao<Category> categoryDao;
     protected GenericDao<Task> taskDao;
+    protected GenericDao<User> userDao;
 
     /**
      * Creates DAO objects and clears test data before each test.
@@ -26,6 +28,7 @@ public abstract class DaoTestBase {
         projectDao = new GenericDao<>(Project.class);
         categoryDao = new GenericDao<>(Category.class);
         taskDao = new GenericDao<>(Task.class);
+        userDao = new GenericDao<>(User.class);
         clearDatabase();
     }
 
@@ -41,6 +44,7 @@ public abstract class DaoTestBase {
             session.createMutationQuery("DELETE FROM Task").executeUpdate();
             session.createMutationQuery("DELETE FROM Project").executeUpdate();
             session.createMutationQuery("DELETE FROM Category").executeUpdate();
+            session.createMutationQuery("DELETE FROM User").executeUpdate();
             transaction.commit();
         } catch (RuntimeException exception) {
             if (transaction != null) {
@@ -74,5 +78,18 @@ public abstract class DaoTestBase {
         int id = categoryDao.insert(category);
         category.setId(id);
         return category;
+    }
+
+    /**
+     * Creates and inserts a user for a test.
+     *
+     * @param username username
+     * @return inserted user
+     */
+    protected User createTestUser(String username) {
+        User user = new User(username);
+        int id = userDao.insert(user);
+        user.setId(id);
+        return user;
     }
 }
